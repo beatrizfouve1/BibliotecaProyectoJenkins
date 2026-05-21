@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('1. Clonar Código') {
             steps {
-                git branch: 'main', 
+                git branch: 'master', 
                     url: 'https://github.com/beatrizfouve1/BibliotecaProyectoJenkins.git'
                 echo '✅ Código descargado correctamente'
             }

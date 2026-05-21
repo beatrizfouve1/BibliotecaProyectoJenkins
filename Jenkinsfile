@@ -18,7 +18,14 @@ pipeline {
         stage('2. Compilar Código') {
             steps {
                 sh 'mvn clean compile'
-                echo '✅ Compilación exitosa'
+            }
+            post {
+                success {
+                    echo '✅ Compilación exitosa'
+                }
+                failure {
+                    echo '❌ Error en la compilación'
+                }
             }
         }
         
@@ -34,7 +41,25 @@ pipeline {
             }
         }
         
-        stage('4. Empaquetar Aplicación') {
+        stage('4. Análisis SonarQube') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh 'mvn sonar:sonar'
+                }
+                echo '🔍 Análisis de calidad enviado a SonarQube'
+            }
+        }
+        
+        stage('5. Esperar Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+                echo '✅ Quality Gate aprobado'
+            }
+        }
+        
+        stage('6. Empaquetar Aplicación') {
             steps {
                 sh 'mvn package'
             }
@@ -46,11 +71,16 @@ pipeline {
             }
         }
         
-        stage('5. Desplegar Artefacto') {
+        stage('7. Desplegar Artefacto') {
             steps {
                 sh '''
+                    # Crear directorio para artefactos
                     mkdir -p /tmp/artefactos-biblioteca
+                    
+                    # Copiar el JAR generado
                     cp target/*.jar /tmp/artefactos-biblioteca/
+                    
+                    # Mostrar información del despliegue
                     echo "========================================="
                     echo "📚 ARTeFACTO DESPLEGADO"
                     echo "========================================="

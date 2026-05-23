@@ -20,12 +20,8 @@ pipeline {
                 sh 'mvn clean compile'
             }
             post {
-                success {
-                    echo '✅ Compilación exitosa'
-                }
-                failure {
-                    echo '❌ Error en la compilación'
-                }
+                success { echo '✅ Compilación exitosa' }
+                failure { echo '❌ Error en la compilación' }
             }
         }
         
@@ -74,13 +70,8 @@ pipeline {
         stage('7. Desplegar Artefacto') {
             steps {
                 sh '''
-                    # Crear directorio para artefactos
                     mkdir -p /tmp/artefactos-biblioteca
-                    
-                    # Copiar el JAR generado
                     cp target/*.jar /tmp/artefactos-biblioteca/
-                    
-                    # Mostrar información del despliegue
                     echo "========================================="
                     echo "📚 ARTeFACTO DESPLEGADO"
                     echo "========================================="
@@ -93,11 +84,7 @@ pipeline {
     }
     
     post {
-        success {
-            echo '🎉 PIPELINE EXITOSO - La Biblioteca está lista!'
-        }
-        failure {
-            echo '💥 PIPELINE FALLÓ - Revisa los logs'
-        }
+        success { echo '🎉 PIPELINE EXITOSO - La Biblioteca está lista!' }
+        failure { echo '💥 PIPELINE FALLÓ - Revisa los logs' }
     }
 }

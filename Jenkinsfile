@@ -46,8 +46,7 @@ pipeline {
             }
         }
         
-               
-        stage('6. Empaquetar Aplicación') {
+        stage('5. Empaquetar Aplicación') {
             steps {
                 sh 'mvn package'
             }
@@ -59,7 +58,7 @@ pipeline {
             }
         }
         
-        stage('7. Desplegar Artefacto') {
+        stage('6. Desplegar Artefacto') {
             steps {
                 sh '''
                     mkdir -p /tmp/artefactos-biblioteca

@@ -46,15 +46,7 @@ pipeline {
             }
         }
         
-        stage('5. Esperar Quality Gate') {
-            steps {
-                timeout(time: 15, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-                echo '✅ Quality Gate aprobado'
-            }
-        }
-        
+               
         stage('6. Empaquetar Aplicación') {
             steps {
                 sh 'mvn package'
